@@ -3,16 +3,20 @@ package Project.Model;
 import Project.Model.Interface.Table;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class Product extends Table {
-    private String name;
-    private String description;
-    private Collection collection;
-    private float price;
-    private HashMap<String, OptionProduct> options;
-    private TypeProduct typeProduct;
+    public String name;
+    public String description;
+    public Collection collection;
+    public float price;
+    public HashMap<String, OptionProduct> options;
+    public TypeProduct typeProduct;
 
-    public Product(String name, String description, Collection collection, float price, HashMap<String, OptionProduct> options, TypeProduct typeProduct) {
+    public Product(){super("products", null);}
+
+    public Product(String id, String name, String description, Collection collection, float price, HashMap<String, OptionProduct> options, TypeProduct typeProduct) {
+        super("products", UUID.fromString(id));
         this.name = name;
         this.description = description;
         this.collection = collection;
@@ -21,51 +25,26 @@ public class Product extends Table {
         this.typeProduct = typeProduct;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public String install() {
+        return "CREATE TABLE IF NOT EXISTS products (" +
+                "id TEXT NOT NULL, " +
+                "id_collection INT NOT NULL, " +
+                "id_typeproduct INT NOT NULL, " +
+                "id_options TEXT NOT NULL, " +
+                "name TEXT NOT NULL, " +
+                "description TEXT NOT NULL, " +
+                "price FLOAT NOT NULL" +
+                ");";
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public boolean insert() {
+        return false;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Collection getCollection() {
-        return collection;
-    }
-
-    public void setCollection(Collection collection) {
-        this.collection = collection;
-    }
-
-    public float getPrice() {
-        return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
-    }
-
-    public HashMap<String, OptionProduct> getOptions() {
-        return options;
-    }
-
-    public void setOptions(HashMap<String, OptionProduct> options) {
-        this.options = options;
-    }
-
-    public TypeProduct getTypeProduct() {
-        return typeProduct;
-    }
-
-    public void setTypeProduct(TypeProduct typeProduct) {
-        this.typeProduct = typeProduct;
+    @Override
+    public boolean update() {
+        return false;
     }
 }

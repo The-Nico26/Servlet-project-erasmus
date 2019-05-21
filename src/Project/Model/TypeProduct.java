@@ -2,18 +2,30 @@ package Project.Model;
 
 import Project.Model.Interface.Table;
 
+import java.util.UUID;
+
 public class TypeProduct extends Table {
-    private String name;
-
-    public TypeProduct(String name) {
+    public String name;
+    public TypeProduct(){super("product_types", null);}
+    public TypeProduct(String name, String id) {
+        super("product_types", UUID.fromString(id));
         this.name = name;
     }
 
-    public String getName() {
-        return name;
+    public String install() {
+        return "CREATE TABLE "+tableName+" (" +
+                "id TEXT NOT NULL, " +
+                "name TEXT NOT NULL" +
+                ");";
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public boolean insert() {
+        return false;
+    }
+
+    @Override
+    public boolean update() {
+        return false;
     }
 }

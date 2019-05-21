@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <link href="../../resources/design.css" type="text/css" rel="stylesheet">
+        <link href="../../resources/pure-min.css" type="text/css" rel="stylesheet">
+        <link href="../../resources/pure-grids-responsive-min.css" type="text/css" rel="stylesheet">
+        <script src="../../resources/jquery-3.4.1.min.js"></script>
+        <style>
+            .popup{
+                position: absolute;
+                background-color: rgba(0,0,0,0.2);
+                width: 100vw;
+                height: 100vh;
+                top:0;
+            }
+        </style>
+    </head>
+    <body>
+        <a class="pure-button button-secondary" onclick="show()">Click</a>
+        <div class="popup" onclick="hide()" style="display: none">
+            <div class="pure-g">
+                <div class="pure-u-1-4"></div>
+                <div class="pure-u-1-2" style="height: 100vh;">
+                    <div class="vertical-text">
+                        <div class="container">
+                            <div class="panel" onclick="event.stopPropagation();">
+                                <div class="article color-grey">
+                                    test
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="../live.js"></script>
+        <script>
+            function show(){
+                $('.popup').css("display", "");
+            }
+            function hide(){
+                $('.popup').css("display", "none");
+            }
+        </script>
+    </body>
+</html>
