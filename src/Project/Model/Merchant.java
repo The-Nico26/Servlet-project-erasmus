@@ -16,6 +16,7 @@ public class Merchant extends Table {
     public String name = "";
     public String webLink = "";
     public String address = "";
+    public ArrayList<Collection> collections;
 
     public Merchant() {
         super("merchants", null);
@@ -27,6 +28,7 @@ public class Merchant extends Table {
         this.webLink = webLink;
         this.address = address;
         this.valid = valid;
+        this.collections = Collection.getAllCollectionsByMerchant(id);
     }
 
     public Merchant(ResultSet rS) throws SQLException {
@@ -44,6 +46,18 @@ public class Merchant extends Table {
             e.printStackTrace();
         }
         return null;
+    }
+    public static ArrayList<Merchant> getAll(){
+        ArrayList<Merchant> merchants = new ArrayList<>();
+        try{
+            ResultSet resultSet = new Merchant().getAllEntities();
+            while(resultSet.next())
+                merchants.add(new Merchant(resultSet));
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return merchants;
     }
 
     public static Merchant getMerchantByName(String name, boolean like){

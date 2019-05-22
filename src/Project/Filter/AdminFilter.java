@@ -24,11 +24,10 @@ public class AdminFilter implements Filter {
         HttpSession hS = request.getSession();
 
         User user = User.getId((String) hS.getAttribute("auth"));
-        if(user != null && user.role.contains("admin")){
+        if(user != null && user.role.contains("admin"))
             request.getRequestDispatcher(action).forward(servletRequest, servletResponse);
-        }else
+        else
             response.sendRedirect("401.jsp");
-
     }
 
     @Override

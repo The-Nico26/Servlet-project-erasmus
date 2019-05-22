@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @WebServlet("/registration")
 public class RegistrationController extends HttpServlet {
@@ -32,8 +34,8 @@ public class RegistrationController extends HttpServlet {
                 user = new User();
                 user.name = name;
                 user.email = email;
-                user.power = new String[]{"cart", "info"};
-                user.role = new String[]{"user"};
+                user.power.addAll(Arrays.asList("cart", "info"));
+                user.role.add("user");
 
                 user.insert();
                 hS.setAttribute("auth", user.getIdString());

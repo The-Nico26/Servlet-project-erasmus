@@ -1,5 +1,7 @@
 <%@ page import="Project.Model.Merchant" %>
-<%@ page import="Project.Model.Model" %><%--
+<%@ page import="Project.Model.Model" %>
+<%@ page import="Project.Model.Collection" %>
+<%@ page import="Project.Model.Product" %><%--
   Created by IntelliJ IDEA.
   User: Nico
   Date: 20/05/2019
@@ -8,7 +10,15 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    Merchant m = Merchant.getMerchantByName(request.getParameter("name"), false);
+    Merchant m = null;
+    Collection c = null;
+    if(request.getParameter("collection") != null){
+        c = Collection.getId(request.getParameter("collection"));
+        assert c != null;
+        m = Merchant.getId(c.merchant);
+    }else
+        m = Merchant.getId(request.getParameter("id"));
+
     Model model = new Model((String) request.getSession().getAttribute("auth"));
     assert m != null;
     boolean access = model.user != null && model.user.merchant != null && model.user.merchant.getIdString().equals(m.getIdString());
@@ -22,6 +32,7 @@
         <link href="resources/design.css" type="text/css" rel="stylesheet">
         <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
         <link href="//fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <script src="resources/jquery-3.4.1.min.js"></script>
     </head>
     <body>
         <div class="account">
@@ -46,70 +57,155 @@
         <div class="pure-g">
             <div class="pure-u-1-4">
                 <div class="panel">
-                    <div class="title color-grey-b"><%= m.name%></div>
+                    <div class="title color-grey-b">Information</div>
+                    <div class="article color-grey">
+                        Name: <%= m.name%><br>
+                        Address: <%= m.address%><br>
+                        Link: <a href="<%= m.webLink %>" target="_blank"><%= m.webLink%></a>
+                        <%
+                            if(access && c == null) {
+                                out.println("<br><br>");
+                                out.println("<a onclick=\"show()\" class=\"pure-button button-secondary\"><i class=\"fa fa-plus\"></i> categories</a>");
+                            }
+                        %>
+                    </div>
+                    <%
+                        if(c != null){
+                    %>
+                    <div class="footer color-grey-b">
+                        <a href="/shop?id=<%=m.getIdString()%>" class="pure-button button-secondary">Return home shop</a>
+                    </div>
+                    <%
+                        }
+                    %>
+                </div>
+                <%
+                    if(c != null) {
+                %>
+                <div class="panel">
                     <div class="article color-grey">
                         Categories:<br>
                         <%
+                            for (Collection collection : m.collections){
+                                %>
+                            -> <a href="/shop?collection=<%=collection.getIdString()%>"><%=collection.name%></a><br>
+                        <%
+                            }
                             if(access){
                         %>
                             <a onclick="show()" class="pure-button button-secondary"><i class="fa fa-plus"></i> categories</a>
-                            <div class="popup" onclick="hide()" style="display: none">
-                                <div class="pure-g">
-                                    <div class="pure-u-1-4"></div>
-                                    <div class="pure-u-1-2" style="height: 100vh;">
-                                        <div class="vertical-text">
-                                            <div class="container">
-                                                <div class="panel" onclick="event.stopPropagation();">
-                                                    <div class="article color-grey">
-                                                        test
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <script>
-                                function show(){
-                                    $('.popup').css("display", "");
-                                }
-                                function hide(){
-                                    $('.popup').css("display", "none");
-                                }
-                            </script>
                         <%
                             }
                         %>
                     </div>
                 </div>
+                <%
+                    }
+                %>
             </div>
             <div class="pure-u-3-4">
                 <div class="pure-g">
+                    <%
+                        if (c != null){
+                    %>
                     <div class="pure-u-1">
                         <div class="panel">
-                            <div class="title color-grey-b">Information</div>
+                            <div class="title color-grey-b">Information of collection</div>
                             <div class="description color-grey">
-                                Name: <%= m.name%><br>
-                                Address: <%= m.address%><br>
-                                Link: <a href="<%= m.webLink %>" target="_blank"><%= m.webLink%>
+                                Name Collection: <%= c.name%><br>
+                                Description: <%= c.description%>
+                                <%
+                                    if(access){
+                                        %>
+                                        <a onclick="show()" class="pure-button button-secondary"></a>
+                                        <%
+                                    }
+                                %>
                             </div>
                         </div>
                     </div>
-                    <div class="pure-u-1-3">
-                        <div class="panel product" onclick="location.href = 'product.html';">
-                            <div class="image" style="">
-                                <div class="title">Example</div>
+                    <%
+                            for (Product product : c.products){
+                                %>
+                        <div class="pure-u-1-3">
+                            <div class="panel product" onclick="location.href = '/product?id=<%=product.getIdString()%>';">
+                                <div class="image" style="">
+                                    <div class="title"><%=product.name%></div>
+                                </div>
+                                <div class="description color-grey">
+                                    <%=product.description%>
+                                </div>
+                                <div class="footer color-grey-b">
+                                    <%=product.price%>$
+                                </div>
                             </div>
-                            <div class="description color-grey">
-                                Description de l'article
+                        </div>
+                    <%
+                            }
+                        }else{
+                            for (Collection collection : m.collections){
+                    %>
+                        <div class="pure-u-1-3">
+                            <div class="panel product" onclick="location.href = '/shop?collection=<%=collection.getIdString()%>';">
+                                <div class="image" style="">
+                                    <div class="title"><%=collection.name%></div>
+                                </div>
+                                <div class="description color-grey">
+                                    <%=collection.description%>
+                                </div>
                             </div>
-                            <div class="footer color-grey-b">
-                                50Zlt
+                        </div>
+                    <%
+                            }
+                        }
+                    %>
+                </div>
+            </div>
+        </div>
+        <%
+            if (access){
+                %>
+
+        <div class="popup-new" onclick="hide('popup-new')" style="display: none">
+            <div class="pure-g">
+                <div class="pure-u-1-4"></div>
+                <div class="pure-u-1-2" style="height: 100vh;">
+                    <div class="vertical-text">
+                        <div class="container">
+                            <div class="panel" onclick="event.stopPropagation();">
+                                <div class="title color-" style="background-color: rgb(120,120,120);">
+                                    Add new Categories
+                                </div>
+                                <div class="article color-" style="background-color: rgb(200,200,200);">
+                                    <form action="/shop?id=<%=m.getIdString()%>" method="post" class="pure-form input-center">
+                                        <fieldset>
+                                            <input type="hidden" name="action" value="add_categories">
+                                            <label for="name">Name</label><br>
+                                            <input type="text" name="name" id="name" placeholder="Name" required><br><br>
+
+                                            <label for="description">Description</label>
+                                            <textarea name="description" id="description" placeholder="Description" required></textarea><br><br>
+
+                                            <input type="submit" class="pure-button button-success" value="Add">
+                                        </fieldset>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <script>
+            function show(el){
+                $(el).css("display", "");
+            }
+            function hide(el){
+                $(el).css("display", "none");
+            }
+        </script>
+        <%
+            }
+        %>
     </body>
 </html>

@@ -43,7 +43,17 @@
         </div>
         <div class="pure-g">
             <div class="pure-u-1 text-center">
-                <a onclick="showAccount()" class="pure-button button-secondary">Show Account</a> - <a onclick="showMerchant()" class="pure-button button-secondary">Show Merchant</a>
+                <a onclick="showAccount()" class="pure-button button-secondary">Show Account</a> -
+                <%
+                    if(m.user.merchant != null && m.user.merchant.valid.equals("3")){%>
+                        <a href="/shop?id=<%=m.user.merchant.getIdString()%>" class="pure-button button-secondary">Show Merchant</a>
+                    <%
+                    }else{
+                %>
+                <a onclick="showMerchant()" class="pure-button button-secondary">Show Merchant</a>
+                <%
+                    }
+                %>
             </div>
             <div class="pure-u-1-4"></div>
             <div class="pure-u-1-2" id="account">
@@ -108,7 +118,7 @@
                             <%= error_shop %><br>
                             <fieldset>
                                 <label for="name_shop">Name:</label><br>
-                                <input type="text" id="name_shop" name="name" placeholder="Shop name" required value="<%=name%>" <% if(!name.equals("")) out.print("disable"); %>><br><br>
+                                <input type="text" id="name_shop" name="name" placeholder="Shop name" required value="<%=name%>" <% if(!name.equals("")) out.print("disabled"); %>><br><br>
 
                                 <label for="address_shop">Address shop:</label>
                                 <input type="text" id="address_shop" name="address" placeholder="Shop address" required value="<%=address%>"><br><br>

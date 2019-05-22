@@ -8,8 +8,6 @@ import javafx.util.Pair;
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Database {
     private ArrayList<Table> elements = new ArrayList<>();
@@ -17,14 +15,13 @@ public class Database {
     private Statement statement;
     private static Database instance = null;
     private String url = "jdbc:sqlite:database.db";
-
+    private Connection conn;
     private Database(){
         initElement();
         try {
             if(!(new File("database.db").exists())) createDatabase();
             Class.forName("org.sqlite.JDBC");
-            Connection conn = DriverManager.getConnection(url);
-            this.statement = conn.createStatement();
+             conn = DriverManager.getConnection(url);
         }catch (Exception ignored){}
     }
 
@@ -35,27 +32,40 @@ public class Database {
         return Database.instance;
     }
 
-    public static ResultSet rowsSQL(String sql, ArrayList<Pair<Integer, String>> hashMap) throws SQLException {
+    public static ResultSet rowsSQL(String sql, ArrayList<Pair<Integer, Object>> hashMap) throws SQLException {
         Database db = getInstance();
+        db.connect();
         PreparedStatement sqlStatement = db.statement.getConnection().prepareStatement(sql);
         int index = 1;
 
-        for (Pair<Integer, String> has : hashMap) {
+        for (Pair<Integer, Object> has : hashMap) {
             sqlStatement.setObject(index, has.getValue(), has.getKey());
             index++;
         }
-        return sqlStatement.executeQuery();
+        ResultSet rS = sqlStatement.executeQuery();
+        db.close();
+        return rS;
     }
 
-    public static int executeSQL(String sql, ArrayList<Pair<Integer, String>> hashMap) throws SQLException {
+    public static int executeSQL(String sql, ArrayList<Pair<Integer, Object>> hashMap) throws SQLException {
         Database db = getInstance();
+        db.connect();
         PreparedStatement sqlStatement = db.statement.getConnection().prepareStatement(sql);
         int index = 1;
-        for (Pair<Integer, String> has : hashMap) {
+        for (Pair<Integer, Object> has : hashMap) {
             sqlStatement.setObject(index, has.getValue(), has.getKey());
             index++;
         }
-        return sqlStatement.executeUpdate();
+        int number = sqlStatement.executeUpdate();
+
+        db.close();
+        return number;
+    }
+    private void connect() throws SQLException {
+        this.statement = this.conn.createStatement();
+    }
+    private void close() throws SQLException {
+        this.statement.close();
     }
 
     private void createDatabase(){
@@ -87,7 +97,6 @@ public class Database {
         elements.add(new User());
         elements.add(new Collection());
         elements.add(new Merchant());
-        elements.add(new OptionProduct());
         elements.add(new Product());
         elements.add(new TypeProduct());
     }

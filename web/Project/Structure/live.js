@@ -59,7 +59,8 @@
           uris = [];
 
       // track local js urls
-      for (var i = 0; i < scripts.length; i++) {
+      var i;
+      for (i = 0; i < scripts.length; i++) {
         var script = scripts[i], src = script.getAttribute("src");
         if (src && isLocal(src))
           uris.push(src);
@@ -74,7 +75,7 @@
       if (active.html) uris.push(document.location.href);
 
       // track local css urls
-      for (var i = 0; i < links.length && active.css; i++) {
+      for (i = 0; i < links.length && active.css; i++) {
         var link = links[i], rel = link.getAttribute("rel"), href = link.getAttribute("href", 2);
         if (href && rel && rel.match(new RegExp("stylesheet", "i")) && isLocal(href)) {
           uris.push(href);
@@ -83,7 +84,7 @@
       }
 
       // initialize the resources info
-      for (var i = 0; i < uris.length; i++) {
+      for (i = 0; i < uris.length; i++) {
         var url = uris[i];
         Live.getHead(url, function (url, info) {
           resources[url] = info;

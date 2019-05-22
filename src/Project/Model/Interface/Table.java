@@ -12,7 +12,7 @@ import java.util.UUID;
 public abstract class Table implements ITable {
     protected UUID id;
     protected String tableName;
-    protected ArrayList<Pair<Integer, String>> preparedSQL;
+    protected ArrayList<Pair<Integer, Object>> preparedSQL;
     protected static ArrayList<Pair<String, String>> searchSQL = new ArrayList<>();
 
     protected Table(String table, UUID id){
@@ -38,7 +38,7 @@ public abstract class Table implements ITable {
 
     protected ResultSet search(ArrayList<Pair<String, String>>  map, boolean like, boolean or){
         String sql = "SELECT * FROM "+tableName+" WHERE ";
-        ArrayList<Pair<Integer, String>> values = new ArrayList<>();
+        ArrayList<Pair<Integer, Object>> values = new ArrayList<>();
 
         for (Pair<String, String> m :map){
             sql += m.getKey()+" "+(like?"LIKE":"=")+" ? "+(or?"OR ":"AND ");
