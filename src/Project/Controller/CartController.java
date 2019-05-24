@@ -16,7 +16,7 @@ public class CartController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
-        if(action != null && action.equals("checkout")){
+        if(action != null){
             switch (action){
                 case "checkout":
                     checkout(req);
@@ -32,8 +32,10 @@ public class CartController extends HttpServlet {
     private void checkout(HttpServletRequest req) {
         HttpSession httpSession = req.getSession();
         User user = User.getId((String) httpSession.getAttribute("auth"));
+
         if(user == null)return;
         Cart cart = user.getLastCart();
+
         if(cart == null || cart.status.equals("1")) return;
         cart.status = "1";
         cart.update();
@@ -72,14 +74,14 @@ public class CartController extends HttpServlet {
         cartElement.productNumber = Integer.valueOf(req.getParameter("number"));
         cartElement.productPrice = product.price;
         String name = product.name+"<br>";
-        String[] options = req.getParameterValues("options");
-        String[] values = req.getParameterValues("values");
+        String[] options = req.getParameterValues("options[]");
+        String[] values = req.getParameterValues("values[]");
         if(options != null){
             for (int in = 0; in < options.length; in++){
-                name += options[in]+":"+values[in]+"<br>";
+                name += options[in]+": "+values[in]+"<br>";
             }
         }
-        cartElement.product = name;
+        cartElement.productName = name;
         cartElement.insert();
     }
 

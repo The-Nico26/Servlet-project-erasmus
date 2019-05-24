@@ -48,20 +48,26 @@ public class Product extends Table {
     }
 
     private String getOptionsString(){
-        StringBuilder optionsString = new StringBuilder();
+        String optionsString = "";
+        if(options.isEmpty())return optionsString;
+
         for(String[] s : options){
             for(String ss : s){
-                optionsString.append(ss).append(Character.toChars('\u0FD5'));
+                optionsString += ss+"¤";
             }
-            optionsString.append(Character.toChars('\u0FD4'));
+            optionsString = optionsString.substring(0, optionsString.length()-1);
+            optionsString += "§";
         }
-        return optionsString.toString();
+        optionsString = optionsString.substring(0, optionsString.length()-1);
+        return optionsString;
     }
 
     private ArrayList<String[]> setOptionsString(String optionsString){
         ArrayList<String[]> optionsLocal = new ArrayList<>();
-        for(String s : optionsString.split(Character.toString('\u0FD4'))){
-            optionsLocal.add(s.split(Character.toString('\u0FD5')));
+        if(optionsString.equals(""))return optionsLocal;
+
+        for(String s : optionsString.split("§")){
+            optionsLocal.add(s.split("¤"));
         }
         return optionsLocal;
     }
@@ -129,7 +135,7 @@ public class Product extends Table {
             preparedSQL.add(new Pair<>(Types.LONGVARCHAR, description));
             preparedSQL.add(new Pair<>(Types.FLOAT, price));
             preparedSQL.add(new Pair<>(Types.LONGVARCHAR, getIdString()));
-
+            System.out.println(getOptionsString());
             Database.executeSQL("UPDATE " + tableName + " SET id_collection = ?, id_typeproduct = ?, options = ?, name = ?, description = ?, price = ? WHERE id = ?", preparedSQL);
             preparedSQL.clear();
         } catch (SQLException e){

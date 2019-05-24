@@ -35,8 +35,8 @@ public class ProductController extends HttpServlet {
         String typeproduct = req.getParameter("typeproduct");
         float price = Float.parseFloat(req.getParameter("price"));
         String id = req.getParameter("id");
-        String options[] = req.getParameterValues("options");
-        String values[] = req.getParameterValues("values");
+        String[] options = req.getParameterValues("options[]");
+        String[] values = req.getParameterValues("values[]");
 
         Product product;
         if(id == null)
@@ -50,10 +50,10 @@ public class ProductController extends HttpServlet {
             product.price = price;
             product.description = description;
             product.typeProduct = TypeProduct.getId(typeproduct);
-
+            product.options.clear();
             if(options != null)
                 for (int in = 0; in < options.length; in++){
-                    product.addOption(values[in], options[in]);
+                    product.addOption(options[in], values[in]);
                 }
 
             if (id == null)

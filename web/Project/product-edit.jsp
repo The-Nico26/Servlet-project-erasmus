@@ -106,30 +106,19 @@
                                         if(option.length != 2) continue;
                                         %>
                                     <div class="pure-g">
-                                        <div class="pure-u-3-8">
+                                        <div class="pure-u-2-5">
                                             <input type="text" value="<%=option[0]%>" placeholder="Name option" name="options[]">
                                         </div>
-                                        <div class="pure-u-3-8">
+                                        <div class="pure-u-2-5">
                                             <input type="text" value="<%=option[1]%>" placeholder="Values (;)" name="values[]">
                                         </div>
-                                        <div class="pure-u-1-4">
-                                            <a onclick="$(this).parent().parent().remove();">Delete this</a>
+                                        <div class="pure-u-1-5">
+                                            <a onclick="$(this).parent().parent().remove();" class="pure-button button-warning">Delete this</a>
                                         </div>
                                     </div>
                                 <%
                                     }
                                 %>
-                                <div class="pure-g">
-                                    <div class="pure-u-2-5">
-                                        <input type="text" placeholder="Name option" name="options[]">
-                                    </div>
-                                    <div class="pure-u-2-5">
-                                        <input type="text" placeholder="Values (;)" name="values[]">
-                                    </div>
-                                    <div class="pure-u-1-5">
-                                        <a onclick="$(this).parent().parent().remove();" class="pure-button button-warning">Delete this</a>
-                                    </div>
-                                </div>
                                 <span id="newElement">
 
                                 </span>
@@ -162,6 +151,7 @@
                     "</div>";
                 $("#newElement").append(html);
             }
+            addElement();
         </script>
     </body>
 </html>

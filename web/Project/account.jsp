@@ -30,10 +30,10 @@
         <script src="resources/jquery-3.4.1.min.js"></script>
     </head>
     <body>
-    <div class="account">
-        <a href='/cart' class='pure-button button-secondary'>Cart <%=cart!=null?"("+cart.cartElements.size()+")":""%></a>
-        <a href='/logout' class='pure-button button-secondary'>Logout</a>
-    </div>
+        <div class="account">
+            <a href='/cart' class='pure-button button-secondary'>Cart <%=cart!=null?"("+cart.cartElements.size()+")":""%></a>
+            <a href='/logout' class='pure-button button-secondary'>Logout</a>
+        </div>
         <div class="text-center">
             <div class="search">
                 <form class="pure-form" action="/search" method="get">
@@ -46,7 +46,9 @@
         </div>
         <div class="pure-g">
             <div class="pure-u-1 text-center">
-                <a onclick="showAccount()" class="pure-button button-secondary">Show Account</a> - <a onclick="showMerchant()" class="pure-button button-secondary">Show Merchant</a>
+                <a onclick="showAccount()" class="pure-button button-secondary">Show account</a>
+                - <a onclick="showMerchant()" class="pure-button button-secondary">Show merchant</a>
+                - <a onclick="showHistory()" class="pure-button button-secondary">Show history Cart</a>
             </div>
             <div class="pure-u-1-4"></div>
             <div class="pure-u-1-2" id="account">
@@ -136,15 +138,62 @@
                     </div>
                 </div>
             </div>
+            <div class="pure-u-1-2" id="history" style="display: none;">
+                <div class="panel">
+                    <div class="title color-grey">
+                        History cart
+                    </div>
+                    <div class="article color-white">
+                        <table class="pure-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Status</th>
+                                    <th>Number product</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            <%
+                                for (Cart cartt : m.user.carts){
+                            %>
+                                <tr>
+                                    <td>
+                                        <a href="/cart?id=<%=cartt.getIdString()%>"><%=cartt.getIdString()%></a>
+                                    </td>
+                                    <td>
+                                        <%=cartt.status%>
+                                    </td>
+                                    <td>
+                                        <%=cartt.cartElements.size()%>
+                                    </td>
+                                </tr>
+                            <%
+                                }
+                            %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
         <script>
             function showAccount(){
-                $('#merchant').css('display', 'none');
-                $('#account').css('display', 'block');
+                hidAll();
+                $('#account').css('display', '');
             }
             function showMerchant(){
-                $('#merchant').css('display', 'block');
+                hidAll();
+                $('#merchant').css('display', '');
+            }
+            function showHistory(){
+                hidAll();
+                $('#history').css('display', '');
+            }
+            function hidAll(){
                 $('#account').css('display', 'none');
+                $('#merchant').css('display', 'none');
+                $('#history').css('display', 'none');
             }
             <%
             if(!screen.equals("")){

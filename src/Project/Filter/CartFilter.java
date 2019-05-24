@@ -1,5 +1,8 @@
 package Project.Filter;
 
+import Project.Model.Cart;
+import Project.Model.User;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServletRequest;
@@ -22,9 +25,23 @@ public class CartFilter implements Filter {
         HttpSession hS = request.getSession();
 
         if(hS.getAttribute("auth") == null)
-            response.sendRedirect("/401.jsp");
-        else
-            request.getRequestDispatcher(action).forward(servletRequest, servletResponse);
+            response.sendRedirect("401.jsp");
+        else {
+            String id = request.getParameter("id");
+            if(id != null){
+                User user = User.getId((String) hS.getAttribute("auth"));
+                assert user != null;
+                for (Cart cart : user.carts){
+                    if(cart.getIdString().equals(id)){
+                        request.getRequestDispatcher(action).forward(servletRequest, servletResponse);
+                        return;
+                    }
+                    response.sendRedirect("401.jsp");
+                }
+            }else{
+                request.getRequestDispatcher(action).forward(servletRequest, servletResponse);
+            }
+        }
     }
 
     @Override

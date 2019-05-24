@@ -11,8 +11,13 @@
 <%
     Model model = new Model((String) request.getSession().getAttribute("auth"));
     assert model.user != null;
+    String id = request.getParameter("id");
+    Cart cart;
 
-    Cart cart = model.user.getLastCart();
+    if(id != null)
+        cart = Cart.getId(id);
+    else
+        cart = model.user.getLastCart();
 %>
 <html>
     <head lang="en">
@@ -67,7 +72,13 @@
                                     <td><%=cartElement.productNumber%></td>
                                     <td><%=cartElement.productPrice%>$</td>
                                     <td class="text-center">
+                                        <%
+                                            if(cart.status.equals("0")){
+                                        %>
                                         <a href="/cart?id=<%=cartElement.getIdString()%>&action=delete" class="pure-button button-warning">Delete</a>
+                                        <%
+                                            }
+                                        %>
                                     </td>
                                 </tr>
                             <%
@@ -78,7 +89,15 @@
                     </div>
                     <div class="footer color-grey">
                         <span class="float-right">
+                            <%
+                                if(cart.status.equals("0")){
+                            %>
                             <a href="/cart?action=checkout" class="pure-button button-success">Checkout =></a>
+                            <%
+                                }else{
+                                    out.println("Already checkout");
+                                }
+                            %>
                         </span>
                         <a href="/index" class="pure-button button-secondary">HomePage</a>
                     </div>

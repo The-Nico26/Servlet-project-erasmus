@@ -58,6 +58,15 @@
                             <br>
                             <%=product.description%>
                         </div>
+                        <%
+                            if(model.user != null && model.user.merchant != null && model.user.merchant.getIdString().equals(m.getIdString())){
+                        %>
+                        <div class="footer text-right color-grey-b">
+                            <a href="/product?id=<%=product.getIdString()%>&action=edit" class="pure-button button-secondary">Edit product</a>
+                        </div>
+                        <%
+                            }
+                        %>
                     </div>
                 </div>
                 <div class="pure-u-1-3">
@@ -66,22 +75,34 @@
                             Price : <%=product.price%>$<br>
                             Shop : <a href="/shop?id=<%=m.getIdString()%>"><%=m.name%></a><br>
 
-                            <form class="pure-form" action="/cart">
+                            <form class="pure-form" action="/cart" method="post">
                                 <fieldset>
-                                    <input type="hidden" name="id" value="<%=product.getIdString()%>">
+                                    <input type="hidden" name="id_product" value="<%=product.getIdString()%>">
                                     <input type="hidden" name="action" value="add">
+
                                     <label for="number">Number:</label>
-                                    <input type="number" id="number" value="1" placeholder="Number" required><br>
-                                    <input type="submit" value="Add Cart" class="pure-button button-success">
+                                    <input type="number" id="number" name="number" value="1" placeholder="Number" required><br><br>
+                                    <%
+                                        if(!product.options.isEmpty()) {
+                                            out.println("Options: <br>");
+                                            for (String[] option : product.options) {
+                                                if(option.length != 2)continue;
+                                                out.println("<label>" + option[0] + "</label>");
+                                                out.println("<input type='hidden' name='values[]' value='" + option[0] + "'>");
+                                                out.println("<select name='options[]'>");
+                                                for (String o : option[1].split(";")) {
+                                                    if (o.equals("")) continue;
+                                                    out.println("<option value='" + o + "'>" + o + "</option>");
+                                                }
+                                                out.println("</select><br>");
+                                            }
+                                        }
+                                    %>
+                                    <div class="text-right">
+                                        <input type="submit" value="Add Cart" class="pure-button button-success">
+                                    </div>
                                 </fieldset>
                             </form>
-                            <%
-                                if(model.user != null && model.user.merchant != null && model.user.merchant.getIdString().equals(m.getIdString())){
-                                    %>
-                                <a href="/product?id=<%=product.getIdString()%>&action=edit" class="pure-button button-secondary">Edit product</a>
-                            <%
-                                }
-                            %>
                         </div>
                     </div>
                 </div>

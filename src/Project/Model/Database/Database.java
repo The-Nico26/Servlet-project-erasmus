@@ -22,7 +22,9 @@ public class Database {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection(url);
             this.statement = conn.createStatement();
-        }catch (Exception ignored){}
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private static Database getInstance(){
