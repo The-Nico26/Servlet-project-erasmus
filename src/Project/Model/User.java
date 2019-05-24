@@ -5,6 +5,7 @@ import Project.Model.Interface.Table;
 import Project.Utils.Hachage;
 import javafx.util.Pair;
 
+import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -14,7 +15,6 @@ import java.util.UUID;
 
 public class User extends Table {
 
-    //INFO OBJECT
     public String name = "";
     public String email = "";
     private String password = "";
@@ -22,6 +22,8 @@ public class User extends Table {
     public ArrayList<String> role = new ArrayList<>();
     public ArrayList<String> power = new ArrayList<>();
     public Merchant merchant = null;
+    public ArrayList<Cart> carts = new ArrayList<>();
+
     public User(){super("users", null);}
 
     public User(String id, String name, String email, String password, String address, String[] role, String[] power, Merchant merchant) {
@@ -33,6 +35,7 @@ public class User extends Table {
         this.role.addAll(Arrays.asList(role));
         this.power.addAll(Arrays.asList(power));
         this.merchant = merchant;
+        this.carts = Cart.getCartByUser(id);
     }
 
     public User(ResultSet rS) throws SQLException {
@@ -68,7 +71,8 @@ public class User extends Table {
     }
 
     public static User getUserByEmail(String email){
-        searchSQL.clear();
+        ArrayList<Pair<String, String>> searchSQL = new ArrayList<>();
+
         searchSQL.add(new Pair<>("email", email));
         ResultSet rS = new User().search(searchSQL, false, false);
         if(rS == null) return null;

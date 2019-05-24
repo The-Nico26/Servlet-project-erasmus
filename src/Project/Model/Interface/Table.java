@@ -13,7 +13,6 @@ public abstract class Table implements ITable {
     protected UUID id;
     protected String tableName;
     protected ArrayList<Pair<Integer, Object>> preparedSQL;
-    protected static ArrayList<Pair<String, String>> searchSQL = new ArrayList<>();
 
     protected Table(String table, UUID id){
         this.tableName = table;

@@ -12,11 +12,11 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class Product extends Table {
-    public String name;
-    public String description;
-    public String collection;
-    public float price;
-    public ArrayList<String[]> options;
+    public String name = "";
+    public String description = "";
+    public String collection = "";
+    public float price = 0;
+    public ArrayList<String[]> options = new ArrayList<>(); //[0] : Name [1] : Values
     public TypeProduct typeProduct;
 
     public Product(){super("products", null);}
@@ -39,7 +39,7 @@ public class Product extends Table {
     public static Product getId(String id_typeproduct) {
         try{
             ResultSet resultSet = new Product().getIdEntity(id_typeproduct);
-            if(resultSet.next())return null;
+            if(!resultSet.next())return null;
             return new Product(resultSet);
         }catch(SQLException e){
             e.printStackTrace();
@@ -47,7 +47,7 @@ public class Product extends Table {
         return null;
     }
 
-    public String getOptionsString(){
+    private String getOptionsString(){
         StringBuilder optionsString = new StringBuilder();
         for(String[] s : options){
             for(String ss : s){
@@ -58,7 +58,7 @@ public class Product extends Table {
         return optionsString.toString();
     }
 
-    public ArrayList<String[]> setOptionsString(String optionsString){
+    private ArrayList<String[]> setOptionsString(String optionsString){
         ArrayList<String[]> optionsLocal = new ArrayList<>();
         for(String s : optionsString.split(Character.toString('\u0FD4'))){
             optionsLocal.add(s.split(Character.toString('\u0FD5')));
@@ -66,7 +66,11 @@ public class Product extends Table {
         return optionsLocal;
     }
 
-    public static ArrayList<Product> getProductsByCollection(String collection){
+    public void addOption(String name, String value){
+        options.add(new String[]{name, value});
+    }
+
+    static ArrayList<Product> getProductsByCollection(String collection){
         ArrayList<Product> products = new ArrayList<>();
         try{
             ArrayList<Pair<String, String>> searchSQL = new ArrayList<>();

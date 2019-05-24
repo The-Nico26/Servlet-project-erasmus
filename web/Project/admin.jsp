@@ -1,5 +1,6 @@
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="Project.Model.Merchant" %><%--
+<%@ page import="Project.Model.Merchant" %>
+<%@ page import="Project.Model.TypeProduct" %><%--
   Created by IntelliJ IDEA.
   User: Nico
   Date: 21/05/2019
@@ -22,39 +23,75 @@
     </head>
     <body>
         <div class="pure-g">
-            <%
-                for (Merchant merchant : merchants){
-                    if(!merchant.valid.equals("1"))continue;
-                %>
-                <div class="pure-u-1-4">
-                    <div class="panel">
-                        <div class="title color-grey-b">
-                            <%= merchant.name%>
-                        </div>
-                        <div class="article color-white">
-                            <form class="pure-form" action="/admin" method="post">
-                                <fieldset>
-                                    <input type="hidden" name="action" value="valid_shop">
-                                    <input type="hidden" name="id" value="<%=merchant.getIdString()%>">
-                                    <label for="name">Name Shop</label><br>
-                                    <input type="text" name="name" id="name" value="<%=merchant.name%>" placeholder="Name" required><br><br>
+            <div class="pure-u-1-2">
+                <%
+                    for (Merchant merchant : merchants){
+                        if(!merchant.valid.equals("1"))continue;
+                    %>
+                    <div class="pure-u-1-2">
+                        <div class="panel">
+                            <div class="title color-grey-b">
+                                <%= merchant.name%>
+                            </div>
+                            <div class="article color-white">
+                                <form class="pure-form" action="/admin" method="post">
+                                    <fieldset>
+                                        <input type="hidden" name="action" value="valid_shop">
+                                        <input type="hidden" name="id" value="<%=merchant.getIdString()%>">
+                                        <label for="name">Name Shop</label><br>
+                                        <input type="text" name="name" id="name" value="<%=merchant.name%>" placeholder="Name" required><br><br>
 
-                                    <label for="address">Address Shop</label><br>
-                                    <input type="text" name="address" id="address" value="<%=merchant.address%>" placeholder="Address" required><br><br>
+                                        <label for="address">Address Shop</label><br>
+                                        <input type="text" name="address" id="address" value="<%=merchant.address%>" placeholder="Address" required><br><br>
 
-                                    <label for="weblink">Link Shop</label><br>
-                                    <input type="text" name="weblink" id="weblink" value="<%=merchant.webLink%>" placeholder="link"><br><br>
+                                        <label for="weblink">Link Shop</label><br>
+                                        <input type="text" name="weblink" id="weblink" value="<%=merchant.webLink%>" placeholder="link"><br><br>
 
-                                    <button type="submit" name="valid_value" value="3" class="pure-button button-success">Validate</button>
-                                    <button type="submit" name="valid_value" value="2" class="pure-button button-success">Invalidate</button>
-                                </fieldset>
-                            </form>
+                                        <button type="submit" name="valid_value" value="3" class="pure-button button-success">Validate</button>
+                                        <button type="submit" name="valid_value" value="2" class="pure-button button-success">Invalidate</button>
+                                    </fieldset>
+                                </form>
+                            </div>
                         </div>
                     </div>
+                    <%
+                    }
+                %>
+            </div>
+            <div class="pure-u-1-2">
+                <div class="panel">
+                    <div class="title color-grey-b">
+                        Add new Type product
+                    </div>
+                    <div class="article color-white">
+                        <form class="pure-form" method="post" action="/admin">
+                            <fieldset>
+                                <input type="hidden" name="action" value="add_type">
+
+                                <label for="nameType">Name</label>
+                                <input type="text" name="name" id="nameType" required><br><br>
+
+                                <input type="submit" value="Add" class="pure-button button-success">
+                            </fieldset>
+                        </form>
+                    </div>
                 </div>
-                <%
-                }
-            %>
+
+                <div class="panel">
+                    <div class="title color-grey-b">
+                        List type product
+                    </div>
+                    <div class="article color-white">
+                        <%
+                            for(TypeProduct typeProduct : TypeProduct.getAll()){
+                        %>
+                            - <%=typeProduct.name%><br>
+                        <%
+                            }
+                        %>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>

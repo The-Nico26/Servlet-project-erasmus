@@ -1,6 +1,7 @@
 package Project.Controller;
 
 import Project.Model.Merchant;
+import Project.Model.TypeProduct;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,12 +23,19 @@ public class AdminController extends HttpServlet {
             case "valid_shop":
                 validShop(req, resp);
                 break;
+            case "add_type":
+                addTypeProduct(req, resp);
         }
         resp.sendRedirect("/admin");
-
     }
 
-    private void validShop(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+    private void addTypeProduct(HttpServletRequest req, HttpServletResponse resp)  throws ServletException, IOException {
+        TypeProduct typeProduct = new TypeProduct();
+        typeProduct.name = req.getParameter("name");
+        typeProduct.insert();
+    }
+
+    private void validShop(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
         Merchant merchant = Merchant.getId(id);
         if(merchant == null) return;

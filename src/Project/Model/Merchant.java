@@ -120,4 +120,11 @@ public class Merchant extends Table {
         }
         return true;
     }
+
+    public Collection haveCollection(String collectionString) {
+        for(Collection collection : collections){
+            if(collection.getIdString().equals(collectionString)) return collection;
+        }
+        return null;
+    }
 }

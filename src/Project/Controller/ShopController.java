@@ -31,8 +31,20 @@ public class ShopController extends HttpServlet {
         switch(req.getParameter("action")){
             case "add_categories":
                 addCategories(req, resp);
+                break;
+            case "edit_categories":
+                editCategories(req, resp);
+                break;
         }
-        resp.sendRedirect("/shop?id="+user.merchant.getIdString());
+    }
+
+    private void editCategories(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+        Collection collection = Collection.getId(req.getParameter("collection"));
+        if(collection == null || user.merchant.haveCollection(collection.getIdString()) == null) return;
+        collection.name = req.getParameter("name");
+        collection.description = req.getParameter("description");
+        collection.update();
+        resp.sendRedirect("/shop?collection="+collection.getIdString());
     }
 
     private void addCategories(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -42,5 +54,6 @@ public class ShopController extends HttpServlet {
         collection.name = req.getParameter("name");
         collection.description = req.getParameter("description");
         collection.insert();
+        resp.sendRedirect("/shop?id="+user.merchant.getIdString());
     }
 }

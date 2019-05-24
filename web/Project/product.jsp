@@ -1,4 +1,7 @@
-<%@ page import="Project.Model.Model" %><%--
+<%@ page import="Project.Model.Model" %>
+<%@ page import="Project.Model.Product" %>
+<%@ page import="Project.Model.Collection" %>
+<%@ page import="Project.Model.Merchant" %><%--
   Created by IntelliJ IDEA.
   User: Nico
   Date: 22/05/2019
@@ -8,6 +11,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     Model model = new Model((String) request.getSession().getAttribute("auth"));
+    Product product = Product.getId(request.getParameter("id"));
+    assert product != null;
+    Collection c = Collection.getId(product.collection);
+    assert c != null;
+    Merchant m = Merchant.getId(c.merchant);
+    assert m != null;
 %>
 <html>
     <head lang="en">
@@ -42,29 +51,37 @@
                 <div class="pure-u-2-3">
                     <div class="panel">
                         <div class="image" style="">
-                            <div class="title">Example</div>
+                            <div class="title"><%=product.name%></div>
                         </div>
                         <div class="article color-white">
-                            Category >> <br>
+                            Category >> <%=c.name%><br>
                             <br>
-                            Description de l'article
+                            <%=product.description%>
                         </div>
                     </div>
                 </div>
                 <div class="pure-u-1-3">
                     <div class="panel">
                         <div class="article color-white">
-                            Price : 50Zlt<br>
-                            Shop : <a href="/shop?id=">IT</a><br>
+                            Price : <%=product.price%>$<br>
+                            Shop : <a href="/shop?id=<%=m.getIdString()%>"><%=m.name%></a><br>
 
                             <form class="pure-form" action="/cart">
                                 <fieldset>
+                                    <input type="hidden" name="id" value="<%=product.getIdString()%>">
                                     <input type="hidden" name="action" value="add">
                                     <label for="number">Number:</label>
                                     <input type="number" id="number" value="1" placeholder="Number" required><br>
                                     <input type="submit" value="Add Cart" class="pure-button button-success">
                                 </fieldset>
                             </form>
+                            <%
+                                if(model.user != null && model.user.merchant != null && model.user.merchant.getIdString().equals(m.getIdString())){
+                                    %>
+                                <a href="/product?id=<%=product.getIdString()%>&action=edit" class="pure-button button-secondary">Edit product</a>
+                            <%
+                                }
+                            %>
                         </div>
                     </div>
                 </div>

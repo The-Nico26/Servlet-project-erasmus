@@ -7,6 +7,7 @@ import javafx.util.Pair;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class TypeProduct extends Table {
@@ -23,12 +24,25 @@ public class TypeProduct extends Table {
     public static TypeProduct getId(String id_typeproduct) {
         try{
             ResultSet resultSet = new TypeProduct().getIdEntity(id_typeproduct);
-            if(resultSet.next())return null;
+            if(!resultSet.next())return null;
             return new TypeProduct(resultSet);
         }catch(SQLException e){
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static ArrayList<TypeProduct> getAll(){
+        ArrayList<TypeProduct> typeProducts = new ArrayList<>();
+        try{
+            ResultSet resultSet = new TypeProduct().getAllEntities();
+            while(resultSet.next())
+                typeProducts.add(new TypeProduct(resultSet));
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return typeProducts;
     }
 
     public String install() {

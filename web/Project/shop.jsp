@@ -65,7 +65,7 @@
                         <%
                             if(access && c == null) {
                                 out.println("<br><br>");
-                                out.println("<a onclick=\"show()\" class=\"pure-button button-secondary\"><i class=\"fa fa-plus\"></i> categories</a>");
+                                out.println("<a onclick=\"show('.popup-new')\" class=\"pure-button button-secondary\"><i class=\"fa fa-plus\"></i> categories</a>");
                             }
                         %>
                     </div>
@@ -93,7 +93,7 @@
                             }
                             if(access){
                         %>
-                            <a onclick="show()" class="pure-button button-secondary"><i class="fa fa-plus"></i> categories</a>
+                            <a onclick="show('.popup-new')" class="pure-button button-secondary"><i class="fa fa-plus"></i> categories</a>
                         <%
                             }
                         %>
@@ -111,14 +111,14 @@
                     <div class="pure-u-1">
                         <div class="panel">
                             <div class="title color-grey-b">Information of collection</div>
-                            <div class="description color-grey">
+                            <div class="article color-grey">
                                 Name Collection: <%= c.name%><br>
                                 Description: <%= c.description%>
                                 <%
                                     if(access){
                                         %>
-                                        <a onclick="show()" class="pure-button button-secondary"></a>
-                                        <%
+                                        <br><a href="/product?action=new" class="pure-button button-secondary">Add new product</a> - <a onclick="show('.popup-edit')" class="pure-button button-secondary"><i class="fa fa-pencil"></i> categories</a>
+                                <%
                                     }
                                 %>
                             </div>
@@ -166,7 +166,7 @@
             if (access){
                 %>
 
-        <div class="popup-new" onclick="hide('popup-new')" style="display: none">
+        <div class="popup-new" onclick="hide('.popup-new')" style="display: none">
             <div class="pure-g">
                 <div class="pure-u-1-4"></div>
                 <div class="pure-u-1-2" style="height: 100vh;">
@@ -196,6 +196,42 @@
                 </div>
             </div>
         </div>
+            <%
+                if(c != null){
+            %>
+        <div class="popup-edit" onclick="hide('.popup-edit')" style="display: none">
+            <div class="pure-g">
+                <div class="pure-u-1-4"></div>
+                <div class="pure-u-1-2" style="height: 100vh;">
+                    <div class="vertical-text">
+                        <div class="container">
+                            <div class="panel" onclick="event.stopPropagation();">
+                                <div class="title color-" style="background-color: rgb(120,120,120);">
+                                    Edit : <%=c.name%>
+                                </div>
+                                <div class="article color-" style="background-color: rgb(200,200,200);">
+                                    <form action="/shop?collection=<%=c.getIdString()%>" method="post" class="pure-form input-center">
+                                        <fieldset>
+                                            <input type="hidden" name="action" value="edit_categories">
+                                            <label for="name_collection">Name</label><br>
+                                            <input type="text" name="name" id="name_collection" placeholder="Name" required value="<%=c.name%>"><br><br>
+
+                                            <label for="description_categories">Description</label>
+                                            <textarea name="description" id="description_categories" placeholder="Description" required><%=c.description%></textarea><br><br>
+
+                                            <input type="submit" class="pure-button button-success" value="Save">
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%
+            }
+        %>
         <script>
             function show(el){
                 $(el).css("display", "");

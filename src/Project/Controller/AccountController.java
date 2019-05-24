@@ -36,7 +36,7 @@ public class AccountController extends HttpServlet {
         String address = req.getParameter("address");
         String weblink = req.getParameter("weblink");
         HttpSession httpSession = req.getSession();
-        if(Merchant.getMerchantByName(name, true) == null) {
+        if(Merchant.getMerchantByName(name, false) == null) {
             Merchant merchant = new Merchant();
             User user = User.getId((String) httpSession.getAttribute("auth"));
             if (user.merchant != null) {
@@ -45,6 +45,10 @@ public class AccountController extends HttpServlet {
                 merchant.valid = "1";
                 merchant.name = name;
             }
+
+            if(merchant.valid.equals("3"))
+                merchant.name = name;
+
             merchant.address = address;
             merchant.webLink = weblink;
 

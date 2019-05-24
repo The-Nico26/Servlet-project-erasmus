@@ -23,7 +23,7 @@
                 }
             %>
         </div>
-        <div class="vertical-text text-center">
+        <div class="vertical-text text-center search">
             <div class="container">
                 <div class="title-web">
                     it shop

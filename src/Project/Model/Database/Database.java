@@ -1,7 +1,6 @@
 package Project.Model.Database;
 
-import Project.Model.Interface.ITable;
-import Project.Model.Interface.Table;
+import Project.Model.Interface.*;
 import Project.Model.*;
 import javafx.util.Pair;
 
@@ -15,13 +14,14 @@ public class Database {
     private Statement statement;
     private static Database instance = null;
     private String url = "jdbc:sqlite:database.db";
-    private Connection conn;
+
     private Database(){
         initElement();
         try {
             if(!(new File("database.db").exists())) createDatabase();
             Class.forName("org.sqlite.JDBC");
-             conn = DriverManager.getConnection(url);
+            Connection conn = DriverManager.getConnection(url);
+            this.statement = conn.createStatement();
         }catch (Exception ignored){}
     }
 
@@ -34,7 +34,6 @@ public class Database {
 
     public static ResultSet rowsSQL(String sql, ArrayList<Pair<Integer, Object>> hashMap) throws SQLException {
         Database db = getInstance();
-        db.connect();
         PreparedStatement sqlStatement = db.statement.getConnection().prepareStatement(sql);
         int index = 1;
 
@@ -42,30 +41,18 @@ public class Database {
             sqlStatement.setObject(index, has.getValue(), has.getKey());
             index++;
         }
-        ResultSet rS = sqlStatement.executeQuery();
-        db.close();
-        return rS;
+        return sqlStatement.executeQuery();
     }
 
     public static int executeSQL(String sql, ArrayList<Pair<Integer, Object>> hashMap) throws SQLException {
         Database db = getInstance();
-        db.connect();
         PreparedStatement sqlStatement = db.statement.getConnection().prepareStatement(sql);
         int index = 1;
         for (Pair<Integer, Object> has : hashMap) {
             sqlStatement.setObject(index, has.getValue(), has.getKey());
             index++;
         }
-        int number = sqlStatement.executeUpdate();
-
-        db.close();
-        return number;
-    }
-    private void connect() throws SQLException {
-        this.statement = this.conn.createStatement();
-    }
-    private void close() throws SQLException {
-        this.statement.close();
+        return sqlStatement.executeUpdate();
     }
 
     private void createDatabase(){
@@ -99,5 +86,7 @@ public class Database {
         elements.add(new Merchant());
         elements.add(new Product());
         elements.add(new TypeProduct());
+        elements.add(new CartElement());
+        elements.add(new Cart());
     }
 }

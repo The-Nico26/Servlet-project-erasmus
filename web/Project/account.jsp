@@ -43,17 +43,7 @@
         </div>
         <div class="pure-g">
             <div class="pure-u-1 text-center">
-                <a onclick="showAccount()" class="pure-button button-secondary">Show Account</a> -
-                <%
-                    if(m.user.merchant != null && m.user.merchant.valid.equals("3")){%>
-                        <a href="/shop?id=<%=m.user.merchant.getIdString()%>" class="pure-button button-secondary">Show Merchant</a>
-                    <%
-                    }else{
-                %>
-                <a onclick="showMerchant()" class="pure-button button-secondary">Show Merchant</a>
-                <%
-                    }
-                %>
+                <a onclick="showAccount()" class="pure-button button-secondary">Show Account</a> - <a onclick="showMerchant()" class="pure-button button-secondary">Show Merchant</a>
             </div>
             <div class="pure-u-1-4"></div>
             <div class="pure-u-1-2" id="account">
@@ -89,28 +79,28 @@
                     </div>
                 </div>
             </div>
-            <%
-                if(m.user.merchant == null || !m.user.merchant.valid.equals("3")){
-            %>
             <div class="pure-u-1-2" id="merchant" style="display: none;">
                 <div class="panel">
                     <div class="title color-white">
-                        Create your Shop
+                        Your shop
                     </div>
                     <div class="article color-grey">
                         <form class="pure-form input-center" action="/account" method="post">
                             <%
                                 String name = "", weblink = "", address = "";
-                                boolean valid = true;
+                                boolean valid = true, write = true;
                                 if(m.user.merchant != null) {
                                     name = m.user.merchant.name;
                                     weblink = m.user.merchant.webLink;
                                     address = m.user.merchant.address;
-                                    if (m.user.merchant.valid.equals("1"))
+                                    if (m.user.merchant.valid.equals("1")) {
                                         out.println("Your shop is submitted");
+                                        write = false;
+                                    }
                                     else if (m.user.merchant.valid.equals("2")) {
                                         out.println("Your shop is not valid");
                                         valid = false;
+                                        write = false;
                                     }
                                 }
                             %>
@@ -118,14 +108,13 @@
                             <%= error_shop %><br>
                             <fieldset>
                                 <label for="name_shop">Name:</label><br>
-                                <input type="text" id="name_shop" name="name" placeholder="Shop name" required value="<%=name%>" <% if(!name.equals("")) out.print("disabled"); %>><br><br>
+                                <input type="text" id="name_shop" name="name" placeholder="Shop name" required value="<%=name%>" <% if(!write) out.print("disabled"); %>><br><br>
 
                                 <label for="address_shop">Address shop:</label>
                                 <input type="text" id="address_shop" name="address" placeholder="Shop address" required value="<%=address%>"><br><br>
 
                                 <label for="weblink">Link shop:</label>
                                 <input type="text" id="weblink" name="weblink" placeholder="Shop Link" value="<%=weblink%>"><br><br>
-
                             </fieldset>
                             <%
                                 if(valid){
@@ -135,14 +124,15 @@
                                 </div>
                             <%
                                 }
+                                if(m.user.merchant != null && m.user.merchant.valid.equals("3")){%>
+                                    <a href="/shop?id=<%=m.user.merchant.getIdString()%>" class="pure-button button-secondary">Go Home Shop</a>
+                                <%
+                                }
                             %>
                         </form>
                     </div>
                 </div>
             </div>
-            <%
-                }
-            %>
         </div>
         <script>
             function showAccount(){
