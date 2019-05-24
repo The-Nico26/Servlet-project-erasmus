@@ -1,7 +1,4 @@
-<%@ page import="Project.Model.Model" %>
-<%@ page import="Project.Model.Product" %>
-<%@ page import="Project.Model.Collection" %>
-<%@ page import="Project.Model.TypeProduct" %><%--
+<%@ page import="Project.Model.*" %><%--
   Created by IntelliJ IDEA.
   User: Nico
   Date: 22/05/2019
@@ -40,8 +37,11 @@
             <a href="/account" class="pure-button button-secondary">Account</a>
             <%
                 if(model.user != null){
-                    out.println("<a href='/cart' class='pure-button button-secondary'>Cart (0)</a>");
-                    out.println("<a href='/logout' class='pure-button button-secondary'>Logout</a>");
+                    Cart cart = model.user.getLastCart();
+            %>
+            <a href='/cart' class='pure-button button-secondary'>Cart <%=cart!=null?"("+cart.cartElements.size()+")":""%></a>
+            <a href='/logout' class='pure-button button-secondary'>Logout</a>
+            <%
                 }
             %>
         </div>

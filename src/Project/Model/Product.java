@@ -36,9 +36,9 @@ public class Product extends Table {
                 resultSet.getFloat("price"), resultSet.getString("options"), TypeProduct.getId(resultSet.getString("id_typeproduct")));
     }
 
-    public static Product getId(String id_typeproduct) {
+    public static Product getId(String product) {
         try{
-            ResultSet resultSet = new Product().getIdEntity(id_typeproduct);
+            ResultSet resultSet = new Product().getIdEntity(product);
             if(!resultSet.next())return null;
             return new Product(resultSet);
         }catch(SQLException e){

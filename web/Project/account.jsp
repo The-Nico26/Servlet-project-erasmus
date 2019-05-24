@@ -1,4 +1,5 @@
-<%@ page import="Project.Model.Model" %><%--
+<%@ page import="Project.Model.Model" %>
+<%@ page import="Project.Model.Cart" %><%--
   Created by IntelliJ IDEA.
   User: Nico
   Date: 18/05/2019
@@ -15,6 +16,7 @@
     hS.setAttribute("error", null);
     hS.setAttribute("error_shop", null);
     Model m = new Model((String) hS.getAttribute("auth"));
+    Cart cart = m.user.getLastCart();
 %>
 <html>
     <head lang="en">
@@ -29,7 +31,8 @@
     </head>
     <body>
     <div class="account">
-        <a href="/cart" class="pure-button button-secondary">Cart (0)</a>
+        <a href='/cart' class='pure-button button-secondary'>Cart <%=cart!=null?"("+cart.cartElements.size()+")":""%></a>
+        <a href='/logout' class='pure-button button-secondary'>Logout</a>
     </div>
         <div class="text-center">
             <div class="search">

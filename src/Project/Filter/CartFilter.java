@@ -1,14 +1,14 @@
 package Project.Filter;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
+import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(filterName = "LoginFilter", urlPatterns = {"/register", "/login"})
-public class LoginFilter implements Filter {
+@WebListener("/cart")
+public class CartFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -21,10 +21,10 @@ public class LoginFilter implements Filter {
         String action = request.getRequestURI();
         HttpSession hS = request.getSession();
 
-        if(hS.getAttribute("auth") != null)
-            response.sendRedirect("/account");
+        if(hS.getAttribute("auth") == null)
+            response.sendRedirect("/401.jsp");
         else
-            servletRequest.getRequestDispatcher(action).forward(servletRequest, servletResponse);
+            request.getRequestDispatcher(action).forward(servletRequest, servletResponse);
     }
 
     @Override

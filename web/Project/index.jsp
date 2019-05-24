@@ -1,4 +1,5 @@
 <%@ page import="Project.Model.Model" %>
+<%@ page import="Project.Model.Cart" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     Model m = new Model((String)request.getSession().getAttribute("auth"));
@@ -18,8 +19,11 @@
             <a href="/account" class="pure-button button-secondary">Account</a>
             <%
                 if(m.user != null){
-                    out.println("<a href='/cart' class='pure-button button-secondary'>Cart (0)</a>");
-                    out.println("<a href='/logout' class='pure-button button-secondary'>Logout</a>");
+                    Cart cart = m.user.getLastCart();
+            %>
+            <a href='/cart' class='pure-button button-secondary'>Cart <%=cart!=null?"("+cart.cartElements.size()+")":""%></a>
+            <a href='/logout' class='pure-button button-secondary'>Logout</a>
+            <%
                 }
             %>
         </div>

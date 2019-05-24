@@ -38,8 +38,13 @@ public class User extends Table {
         this.carts = Cart.getCartByUser(id);
     }
 
+
     public User(ResultSet rS) throws SQLException {
         this(rS.getString("id"), rS.getString("name"), rS.getString("email"), rS.getString("password"), rS.getString("address"), rS.getString("role").split(";"), rS.getString("power").split(";"), Merchant.getId(rS.getString("id_merchant")));
+    }
+
+    public Cart getLastCart(){
+        return carts.isEmpty()?null:carts.get(carts.size()-1);
     }
 
     public static ArrayList<User> getAll(){
