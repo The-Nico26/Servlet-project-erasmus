@@ -49,6 +49,20 @@ public class Collection extends Table {
         return null;
     }
 
+    public static ArrayList<Collection> searchByName(String name){
+        ArrayList<Collection> collections = new ArrayList<>();
+        try {
+            ArrayList<Pair<String, String>> searchSQL = new ArrayList<>();
+            searchSQL.add(new Pair<>("name", name));
+            ResultSet resultSet = new Collection().search(searchSQL, true, false);
+            while(resultSet.next())
+                collections.add(new Collection(resultSet));
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return collections;
+    }
+
     public static ArrayList<Collection> getAllCollectionsByMerchant(String idMerchant){
         ArrayList<Collection> collections = new ArrayList<>();
         try {

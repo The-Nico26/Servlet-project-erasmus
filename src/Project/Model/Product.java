@@ -36,6 +36,20 @@ public class Product extends Table {
                 resultSet.getFloat("price"), resultSet.getString("options"), TypeProduct.getId(resultSet.getString("id_typeproduct")));
     }
 
+    public static ArrayList<Product> searchByName(String name){
+        ArrayList<Product> products = new ArrayList<>();
+        try {
+            ArrayList<Pair<String, String>> searchSQL = new ArrayList<>();
+            searchSQL.add(new Pair<>("name", name));
+            ResultSet resultSet = new Product().search(searchSQL, true, false);
+            while(resultSet.next())
+                products.add(new Product(resultSet));
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return products;
+    }
+
     public static Product getId(String product) {
         try{
             ResultSet resultSet = new Product().getIdEntity(product);
