@@ -35,7 +35,7 @@ public class ProductFilter implements Filter {
                 response.sendRedirect("401.jsp");
                 return;
             }
-            if(param.equals("edit")) {
+            if(param.equals("edit") || param.equals("remove")) {
                 if (user.merchant == null || user.merchant.haveCollection(product.collection) == null) {
                     response.sendRedirect("404.jsp");
                     return;

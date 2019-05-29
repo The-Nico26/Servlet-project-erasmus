@@ -44,7 +44,7 @@ public class User extends Table {
     }
 
     public Cart getLastCart(){
-        return carts.isEmpty()?null:carts.get(carts.size()-1);
+        return carts.isEmpty()? null: (carts.get(carts.size()-1).status.equals("0") ? carts.get(carts.size()-1) : null);
     }
 
     public static ArrayList<User> getAll(){
@@ -92,7 +92,6 @@ public class User extends Table {
     }
 
     public boolean checkPassword(String password){
-        System.out.println(Hachage.encrypt("SHA-512", password));
         return this.password.equals(Hachage.encrypt("SHA-512", password));
     }
 

@@ -1,5 +1,6 @@
 package Project.Controller;
 
+import Project.Model.Collection;
 import Project.Model.Product;
 import Project.Model.TypeProduct;
 
@@ -14,6 +15,7 @@ import java.io.IOException;
 @WebServlet("/product")
 public class ProductController extends HttpServlet {
 
+    private String idMerchant = "";
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action") == null ? "index" : req.getParameter("action");
@@ -24,7 +26,19 @@ public class ProductController extends HttpServlet {
             case "edit": case"new":
                 req.getRequestDispatcher("product-edit.jsp").forward(req, resp);
                 break;
+            case "remove":
+                removeProduct(req, resp);
+                resp.sendRedirect("/shop?id="+idMerchant);
+                break;
         }
+    }
+
+    private void removeProduct(HttpServletRequest req, HttpServletResponse resp){
+        String id = req.getParameter("id");
+        Product product = Product.getId(id);
+        if(product == null)return;
+        idMerchant = Collection.getId(product.collection).merchant;
+        product.delete();
     }
 
     @Override

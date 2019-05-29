@@ -38,6 +38,7 @@ public class Collection extends Table {
                 "description TEXT NOT NULL"+
                 ");";
     }
+
     public static Collection getId(String id){
         try {
             ResultSet resultSet = new Collection().getIdEntity(id);

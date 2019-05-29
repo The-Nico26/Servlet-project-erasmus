@@ -132,6 +132,11 @@
                             </fieldset>
                         </form>
                     </div>
+                    <% if (id != null){ %>
+                    <div class="footer color-grey text-right">
+                        <a href="/product?id=<%=product.getIdString()%>&action=remove" class="pure-button button-warning">Delete Product</a>
+                    </div>
+                    <% } %>
                 </div>
             </div>
         </div>

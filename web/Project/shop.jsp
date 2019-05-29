@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    Merchant m = null;
+    Merchant m;
     Collection c = null;
     if(request.getParameter("collection") != null){
         c = Collection.getId(request.getParameter("collection"));
@@ -66,6 +66,7 @@
                             if(access && c == null) {
                                 out.println("<br><br>");
                                 out.println("<a onclick=\"show('.popup-new')\" class=\"pure-button button-secondary\"><i class=\"fa fa-plus\"></i> categories</a>");
+                                out.println("<a onclick=\"show('.popup-historic')\" class=\"pure-button button-secondary\">Historic sell</a>");
                             }
                         %>
                     </div>
@@ -117,7 +118,7 @@
                                 <%
                                     if(access){
                                         %>
-                                        <br><a href="/product?action=new" class="pure-button button-secondary">Add new product</a> - <a onclick="show('.popup-edit')" class="pure-button button-secondary"><i class="fa fa-pencil"></i> categories</a>
+                                        <br><a href="/product?action=new" class="pure-button button-secondary">Add new product</a> - <a onclick="show('.popup-edit')" class="pure-button button-secondary"><i class="fa fa-pencil"></i> categories</a> - <a href="/shop?collection=<%=c.getIdString()%>&action=remove_collection" class="pure-button button-warning">Remove collection</a>
                                 <%
                                     }
                                 %>
@@ -189,6 +190,45 @@
                                             <input type="submit" class="pure-button button-success" value="Add">
                                         </fieldset>
                                     </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="popup-historic" onclick="hide('.popup-historic')" style="display: none">
+            <div class="pure-g">
+                <div class="pure-u-1-4"></div>
+                <div class="pure-u-1-2" style="height: 100vh;">
+                    <div class="vertical-text">
+                        <div class="container">
+                            <div class="panel" onclick="event.stopPropagation();">
+                                <div class="article color-white">
+                                    <table class="pure-table" style="min-width: 100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Who ?</th>
+                                                <th>Name</th>
+                                                <th>Number</th>
+                                                <th>Price (per unit)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <%
+                                                for(CartElement cartElement : m.cartElements){
+                                            %>
+                                            <tr>
+                                                <td><%=User.getId(Cart.getId(cartElement.cart).user).name%></td>
+                                                <td><%=cartElement.productName%></td>
+                                                <td><%=cartElement.productNumber%></td>
+                                                <td><%=cartElement.productPrice%>$</td>
+                                            </tr>
+                                            <%
+                                                }
+                                            %>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>

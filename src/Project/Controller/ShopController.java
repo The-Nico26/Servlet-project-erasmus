@@ -15,9 +15,25 @@ import java.io.IOException;
 @WebServlet("/shop")
 public class ShopController extends HttpServlet {
     private User user;
+    private String idMerchant;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String action = (req.getParameter("action") == null ? "":req.getParameter("action"));
+        switch (action){
+            case "remove_collection":
+                removeCollection(req, resp);
+                resp.sendRedirect("/shop?id="+idMerchant);
+                return;
+        }
         req.getRequestDispatcher("shop.jsp").forward(req, resp);
+    }
+
+    private void removeCollection(HttpServletRequest req, HttpServletResponse resp) {
+        String id = req.getParameter("collection");
+        Collection collection = Collection.getId(id);
+        if(collection == null)return;
+        idMerchant = collection.merchant;
+        collection.delete();
     }
 
     @Override

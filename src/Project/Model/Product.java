@@ -149,7 +149,6 @@ public class Product extends Table {
             preparedSQL.add(new Pair<>(Types.LONGVARCHAR, description));
             preparedSQL.add(new Pair<>(Types.FLOAT, price));
             preparedSQL.add(new Pair<>(Types.LONGVARCHAR, getIdString()));
-            System.out.println(getOptionsString());
             Database.executeSQL("UPDATE " + tableName + " SET id_collection = ?, id_typeproduct = ?, options = ?, name = ?, description = ?, price = ? WHERE id = ?", preparedSQL);
             preparedSQL.clear();
         } catch (SQLException e){

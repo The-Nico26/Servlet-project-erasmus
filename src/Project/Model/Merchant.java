@@ -17,6 +17,7 @@ public class Merchant extends Table {
     public String webLink = "";
     public String address = "";
     public ArrayList<Collection> collections;
+    public ArrayList<CartElement> cartElements;
 
     public Merchant() {
         super("merchants", null);
@@ -29,6 +30,7 @@ public class Merchant extends Table {
         this.address = address;
         this.valid = valid;
         this.collections = Collection.getAllCollectionsByMerchant(id);
+        this.cartElements = CartElement.getElementBy("merchant", id);
     }
 
     public Merchant(ResultSet rS) throws SQLException {
